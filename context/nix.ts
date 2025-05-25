@@ -1,12 +1,13 @@
 import { Context } from "../dake.ts";
 import * as pathLib  from "../path.ts";
+import * as fileLib from "../file.ts";
 
 export async function tryNixContext(projectRoot: pathLib.Path) : Promise<Context | null> {
     const shellNixPath = await lookupShellNix(projectRoot);
     if (shellNixPath === null) {
         return null;
     }
-    throw new Error("Not implemented");
+    return buildNixContext(shellNixPath);
 }
 
 /**
@@ -58,3 +59,52 @@ async function lookupShellNix(path: pathLib.Path) : Promise<pathLib.Path | null>
     return lookupShellNix(parentDir);
 }
 
+type NixContext = Readonly<{ paths: pathLib.Path[]; sha: string }>;
+
+/**
+ * Builds a nix context by running nix-shell and extracting PATH information.
+ * 
+ * @param shellNixPath - Path to the shell.nix file
+ * @returns Promise resolving to NixContext containing PATH entries
+ * @throws {Error} If nix-shell command fails or PATH cannot be extracted
+ */
+async function buildNixContext(shellNixPath: pathLib.Path): Promise<NixContext> {
+    const shellNixDir = pathLib.dirname(shellNixPath);
+
+    const currentPathVariable = Deno.env.get("PATH") ?? "";
+    const currentPaths = new Set(currentPathVariable === "" ? [] : currentPathVariable.split(":"));
+
+    // Calculate shell.nix hash
+    const sha = await fileLib.sha512(shellNixPath);
+
+    // Run nix-shell and capture PATH
+    // TODO :: replace echo with dake itself.
+    const cmd = new Deno.Command("nix-shell", {
+        args: ["--run", "echo $PATH"],
+        cwd: shellNixDir,
+        stdin: "null",
+        stdout: "piped",
+    });
+    const output = await cmd.output();
+
+    if (!output.success) {
+        throw new Error("Failed to run nix-shell");
+    }
+    const pathValue = new TextDecoder().decode(output.stdout).trim();
+    
+    const rawPaths = pathValue === "" ? [] : pathValue.split(":");
+    const paths: pathLib.Path[] = [];
+    
+    for (const rawPath of rawPaths) {
+        // Skip if path is in current PATH
+        if (currentPaths.has(rawPath)) {
+            continue;
+        }
+        const path = pathLib.maybeToPath(rawPath);
+        if (path !== null) {
+            paths.push(path);
+        }
+    }
+
+    return { paths, sha };
+}

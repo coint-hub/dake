@@ -2,7 +2,7 @@ import { enterShell } from "./action/shell.ts";
 import { tryNixContext } from "./context/nix.ts";
 import * as pathLib from "./path.ts";
 
-export type Context = {};
+export type Context = Readonly<{ paths: pathLib.Path[]; }>;
 
 export async function runDake(projectRoot: pathLib.Path) : Promise<void> {
     if (!await pathLib.isDirectory(projectRoot)) {

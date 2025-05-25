@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-read 
+#!/usr/bin/env -S deno run --allow-read --allow-env --allow-run
 
 import { runDake } from "./dake.ts";
 import * as pathLib from "./path.ts";
