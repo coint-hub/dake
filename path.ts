@@ -44,6 +44,7 @@
 
 import * as stdPath from "@std/path";
 import * as stdFs from "@std/fs";
+import { Result, Ok, Err } from "./result.ts";
 
 /**
  * Type-safe path representation.
@@ -100,6 +101,72 @@ export type ExistsOptions = {
  */
 function toPath(path: string) : Path {
     return path as Path;
+}
+
+/**
+ * Attempts to convert a string to a valid Path.
+ * The path must be or be convertible to an absolute path starting with '/'.
+ * 
+ * @param path - The path string to convert
+ * @returns Result containing either the validated absolute Path or an error message
+ * 
+ * @example
+ * ```typescript
+ * // Convert relative to absolute path
+ * const result = tryToPath("./config/file.txt");
+ * switch (result.ok) {
+ *     case true:
+ *         const absPath = result.value;
+ *         // use absPath...
+ *         break;
+ *     case false:
+ *         console.error(result.error);
+ *         break;
+ * }
+ * ```
+ */
+export function tryToPath(path: string): Result<Path, string> {
+    const absolutePath = stdPath.isAbsolute(path) 
+        ? path 
+        : stdPath.resolve(path);
+
+    if (!absolutePath.startsWith('/')) {
+        return Err(`Invalid path: cannot be converted to an absolute path, path: ${path}`);
+    }
+
+    return Ok(toPath(absolutePath));
+}
+
+/**
+ * Attempts to convert a string to a valid Path, returning null on failure.
+ * A convenience wrapper around tryToPath that returns null instead of an error message.
+ * The path must be or be convertible to an absolute path starting with '/'.
+ * 
+ * @param path - The path string to convert
+ * @returns The validated absolute Path if successful, null otherwise
+ * 
+ * @example
+ * ```typescript
+ * // Convert relative to absolute path
+ * const absPath = maybeToPath("./config/file.txt");
+ * switch (absPath) {
+ *     case null:
+ *         console.error("Failed to convert path");
+ *         break;
+ *     default:
+ *         // use absPath...
+ *         break;
+ * }
+ * ```
+ */
+export function maybeToPath(path: string): Path | null {
+    const result = tryToPath(path);
+    switch (result.ok) {
+        case true:
+            return result.value;
+        case false:
+            return null;
+    }
 }
 
 /**
