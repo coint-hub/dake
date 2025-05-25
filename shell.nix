@@ -6,7 +6,7 @@ let
     sha256 = "0i0ayb1p7ypbjnjf837qlfn6n3i3468cvalha54yakjdi6a6srnb";
   }) { };
   packages = with stablePkgs; [
-    deno
+    deno # 2.2.12
   ];
 in
 pkgs.mkShell {
