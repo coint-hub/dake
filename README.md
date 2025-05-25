@@ -65,6 +65,19 @@ graph TD
   - Designed for managing complex CLI tool interactions
   - Efficient handling of code generation hooks
 
+## TODO
+
+### Permission Management
+- [ ] **Permission Handler**
+  - Implement proper user alerts for permission requests
+  - Provide clear feedback on why permissions are needed
+  - Handle permission denials gracefully
+
+- [ ] **Permission Collector**
+  - Add pre-execution permission notification system
+  - Collect and display all required permissions before running tasks
+  - Allow users to review and approve permissions in batch
+
 ## Requirements
 
 - [Deno](https://deno.land/) runtime
