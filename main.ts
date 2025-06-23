@@ -1,10 +1,7 @@
-#!/usr/bin/env -S deno run --allow-read --allow-env --allow-run
+#!/usr/bin/env -S deno run
 
-import { runDake } from "./dake.ts";
-import * as pathLib from "./path.ts";
-
-async function main() {
-  await runDake(pathLib.dirFromMeta(import.meta));
+function main() {
+  console.log("Hello, deno!");
 }
 
 if (import.meta.main) {
