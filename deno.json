@@ -1,0 +1,11 @@
+{
+  "name": "@coint/dake",
+  "version": "0.0.1",
+  "imports": {
+    "@libs/logger": "jsr:@libs/logger@^3.1.4"
+  },
+  "exports": { ".": "mod.ts" },
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": true
+  }
+}

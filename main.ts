@@ -1,7 +1,10 @@
-#!/usr/bin/env -S deno run
+#!/usr/bin/env -S deno run --allow-env
+
+import { logger } from "./src/logger.ts";
+import { config } from "./src/config.ts";
 
 function main() {
-  console.log("Hello, deno!");
+  logger.debug("dake", { version: config.version });
 }
 
 if (import.meta.main) {
