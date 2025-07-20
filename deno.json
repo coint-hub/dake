@@ -4,8 +4,11 @@
   "imports": {
     "@libs/logger": "jsr:@libs/logger@^3.1.4"
   },
-  "exports": { ".": "mod.ts" },
+  "exports": { ".": "./mod.ts" },
   "compilerOptions": {
     "noUncheckedIndexedAccess": true
+  },
+  "tasks": {
+    "build": "deno compile --allow-env main.ts"
   }
 }

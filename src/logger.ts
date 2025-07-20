@@ -1,3 +1,3 @@
 import { Logger } from "@libs/logger";
 
-export const logger = new Logger({ caller: true });
+export const logger: Logger = new Logger({ caller: true });

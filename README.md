@@ -100,3 +100,24 @@ Even the simple version is as concise as the bash script, but with better readab
 ## Why Another Scripting Tool?
 
 TODO :: explain kindly
+
+# Architecture
+
+dake consists of two main components, inspired by the traditional make and Makefile pattern:
+
+## Core Components
+
+### 1. dake Binary (Executable)
+The runtime that configures the execution context and launches your scripts:
+- Context Manager: Sets up the proper environment for script execution
+  - Nix shell integration for managing package paths
+  - Flutter version management (FVM) support
+  - Environment variable handling
+
+### 2. User Scripts (dake.ts)
+Your TypeScript automation scripts with built-in utilities:
+- Argument Parser: Type-safe command-line argument handling
+- Config Parser: Modern replacement for dotenv with validation
+- CLI Utilities: Type-safe wrappers for common tools (find, grep, etc.)
+- File Operations: Enhanced file system operations with safety features
+- Process Management: Better control over subprocess execution
