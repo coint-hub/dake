@@ -83,7 +83,7 @@ From the README examples:
 
 ## Development Tips
 
-- you can check codes with verify task
+- You can check code quality with the verify task
 
 ## Available Deno Tasks
 
@@ -97,4 +97,17 @@ deno task verify
 
 ## Git Workflow Guidance
 
-- do not try to git add, I will stage files for you.
+- Do not try to git add, I will stage files for you
+
+## Code Development Notes
+
+### Testing with @std/assert
+
+- `assertEquals` performs deep comparison, so Result types (plain objects) can be compared directly
+- `assertEquals` has loose typing which can cause type inference issues with generic functions
+  - When using `err()` with `assertEquals`, add explicit type information: `err<ErrorType>({...})`
+  - Avoid using `as const` assertions - prefer explicit type parameters instead
+
+### Testing Best Practices
+
+- Use `assert()` instead of `if (!condition) throw new Error()` patterns
