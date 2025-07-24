@@ -80,3 +80,21 @@ From the README examples:
 - Built-in error handling by default
 - Two-stage deletion for safety (move to .trash before permanent deletion)
 - Consistent, readable APIs that are easier than bash equivalents
+
+## Development Tips
+
+- you can check codes with verify task
+
+## Available Deno Tasks
+
+```bash
+# Build the project into an executable
+deno task build
+
+# Verify code quality (runs check, lint, tests, and doc tests)
+deno task verify
+```
+
+## Git Workflow Guidance
+
+- do not try to git add, I will stage files for you.
